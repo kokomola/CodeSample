@@ -1,0 +1,114 @@
+import { ArrowRight } from '@components/uikit/Icon/lib';
+import React, { useState } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import Modal from 'react-native-modal';
+import { purple600 } from '@constants/colors';
+
+const ChangeYearModal = ({
+  isVisible,
+  dismiss,
+  displayTime,
+  setDisplayTime,
+  colorOptions,
+}) => {
+  const { primary, backgroundColor } = colorOptions;
+  const [year, setYear] = useState(displayTime.getFullYear());
+  const onDismiss = () => {
+    dismiss();
+    const newDate = new Date(
+      year,
+      displayTime.getMonth(),
+      displayTime.getDate()
+    );
+    setDisplayTime(newDate);
+  };
+
+  return (
+    <Modal
+      isVisible={isVisible}
+      useNativeDriver
+      hideModalContentWhileAnimating
+      onBackButtonPress={onDismiss}
+      onBackdropPress={onDismiss}
+      animationIn={'zoomIn'}
+      animationOut={'zoomOut'}
+      style={styles.modal}
+    >
+      <View style={[styles.container, { backgroundColor }]}>
+        <TouchableOpacity
+          onPress={() => {
+            setYear((prev) => prev - 1);
+          }}
+          style={styles.btn}
+        >
+          <ArrowRight
+            style={{ transform: [{ rotate: '-90deg' }] }}
+            fill={purple600}
+          />
+          <Text style={styles.prevYearText}>{year - 1}</Text>
+        </TouchableOpacity>
+        <Text style={[styles.yearText, { color: primary }]}>{year}</Text>
+        <TouchableOpacity
+          onPress={() => {
+            setYear((prev) => prev + 1);
+          }}
+          style={styles.btn}
+        >
+          <Text style={styles.nextYearText}>{year + 1}</Text>
+          <ArrowRight
+            style={{ transform: [{ rotate: '90deg' }] }}
+            fill={purple600}
+          />
+        </TouchableOpacity>
+      </View>
+    </Modal>
+  );
+};
+
+export default ChangeYearModal;
+
+const styles = StyleSheet.create({
+  modal: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  container: {
+    width: 250,
+    borderRadius: 12,
+    padding: 16,
+    backgroundColor: '#fff',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  btn: {
+    // borderWidth: 1,
+    width: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  btn_text: {
+    fontSize: 18,
+  },
+  yearText: {
+    // borderWidth: 1,
+    fontSize: 28,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  prevYearText: {
+    // borderWidth: 1,
+    fontSize: 16,
+    color: '#7A7A7A',
+    textAlign: 'center',
+    marginTop: 8,
+    marginBottom: 4,
+  },
+  nextYearText: {
+    // borderWidth: 1,
+    fontSize: 16,
+    color: '#7A7A7A',
+    textAlign: 'center',
+    marginTop: 4,
+    marginBottom: 8,
+  },
+});

@@ -1,0 +1,42 @@
+const patchPostMessageFunction = () => {
+  const originalPostMessage = window.postMessage;
+
+  var patchedPostMessage = (message, targetOrigin, transfer) => {
+    originalPostMessage(message, targetOrigin, transfer);
+  };
+
+  patchedPostMessage.toString = () => {
+    return String(Object.hasOwnProperty).replace(
+      'hasOwnProperty',
+      'postMessage'
+    );
+  };
+
+  window.postMessage = patchedPostMessage;
+
+  //patchedPostMessage = undefined;
+};
+
+export const patchPostMessageJsCode = `(${String(
+  patchPostMessageFunction
+)})();`;
+
+export const getExecutionFunction = ({ siteKey, action }) => `
+  window.grecaptcha.enterprise.execute("${siteKey}", { action: "${action}" })
+    .then(token => window.ReactNativeWebView.postMessage(token))
+    .catch(error => window.ReactNativeWebView.postMessage(error))
+`;
+
+export const getWebViewContent = ({ siteKey, action }) => `
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://www.google.com/recaptcha/enterprise.js?render=${siteKey}"></script>
+<script type="text/javascript">
+window.grecaptcha.enterprise.ready(() => {
+  ${getExecutionFunction({ siteKey, action })}
+});
+</script>
+</head>
+</html>
+`;

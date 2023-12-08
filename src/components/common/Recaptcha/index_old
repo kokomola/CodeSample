@@ -1,0 +1,78 @@
+import { getRecaptchaSiteKeyByMode } from '@utils/getEnv';
+import React from 'react';
+import { Platform } from 'react-native';
+import { WebView } from 'react-native-webview';
+
+import {
+  getWebViewContent,
+  getExecutionFunction,
+  patchPostMessageJsCode,
+} from './helpers';
+
+export class ReCaptcha extends React.Component {
+  webViewRef = null;
+
+  refresh() {
+    const { action } = this.props;
+
+    if (Platform.OS === 'ios' && this.webViewRef) {
+      this.webViewRef.injectJavaScript(
+        getExecutionFunction({ siteKey: getRecaptchaSiteKeyByMode(), action })
+      );
+    } else if (Platform.OS === 'android' && this.webViewRef) {
+      this.webViewRef.reload();
+    }
+  }
+
+  render() {
+    const { onSuccess, onError, action, baseUrl } = this.props;
+
+    const handleMessage = (e) => {
+      if (!e.nativeEvent.data) return null;
+
+      const message = e.nativeEvent.data;
+      //console.log('recaptcha said: ', message);
+      const badWords = ['cancel', 'error', 'exception', 'invalid', 'expired'];
+      const responseHasBadWord = badWords.reduce((acc, badWord) => {
+        if (acc) return acc;
+        return message.toLowerCase().includes(badWord);
+      }, false);
+
+      if (responseHasBadWord) {
+        console.error('Recaptcha webview said a bad word:', message);
+        return onError(message);
+      }
+
+      return onSuccess(message);
+    };
+
+    return (
+      <>
+        <WebView
+          ref={(ref) => {
+            this.webViewRef = ref;
+          }}
+          //cacheEnabled={false}
+          originWhitelist={['*']}
+          mixedContentMode="always"
+          onMessage={handleMessage}
+          javaScriptEnabled
+          injectedJavaScript={patchPostMessageJsCode}
+          automaticallyAdjustContentInsets
+          source={{
+            html: getWebViewContent({
+              siteKey: getRecaptchaSiteKeyByMode(),
+              action,
+            }),
+            baseUrl,
+          }}
+          onContentProcessDidTerminate={(syntheticEvent) => {
+            const { nativeEvent } = syntheticEvent;
+            console.warn('Content process terminated, reloading', nativeEvent);
+            this.refs.webview?.reload();
+          }}
+        />
+      </>
+    );
+  }
+}

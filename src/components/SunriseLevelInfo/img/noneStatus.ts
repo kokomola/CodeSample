@@ -1,0 +1,40 @@
+export const noneStatus = `
+<svg width="44" height="44" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="32" cy="32" r="32" fill="url(#paint0_linear)"/>
+<circle cx="32" cy="32" r="26" fill="url(#paint1_linear)" stroke="url(#paint2_linear)"/>
+<g filter="url(#filter0_i)">
+<circle cx="32" cy="32" r="22" fill="url(#paint3_linear)"/>
+</g>
+<defs>
+<filter id="filter0_i" x="10" y="10" width="44" height="44" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset/>
+<feGaussianBlur stdDeviation="2"/>
+<feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0.764917 0 0 0 0 0.410443 0 0 0 0 0 0 0 0 1 0"/>
+<feBlend mode="normal" in2="shape" result="effect1_innerShadow"/>
+</filter>
+<linearGradient id="paint0_linear" x1="38" y1="67" x2="37.5" y2="-1.91928e-06" gradientUnits="userSpaceOnUse">
+<stop stop-color="#F99B2F"/>
+<stop offset="0.869208" stop-color="#FDDBA9"/>
+</linearGradient>
+<linearGradient id="paint1_linear" x1="38.1311" y1="61.1229" x2="41.1967" y2="9.51918" gradientUnits="userSpaceOnUse">
+<stop offset="0.159171" stop-color="#FDD9A3"/>
+<stop offset="0.545093" stop-color="#ECA858"/>
+<stop offset="1" stop-color="#F2A454"/>
+</linearGradient>
+<linearGradient id="paint2_linear" x1="6" y1="6" x2="6" y2="58" gradientUnits="userSpaceOnUse">
+<stop stop-color="white"/>
+<stop offset="0.528812" stop-color="#FFB965"/>
+<stop offset="1" stop-color="#FAFEFF"/>
+</linearGradient>
+<linearGradient id="paint3_linear" x1="35.089" y1="56.6211" x2="34.5996" y2="11.5994" gradientUnits="userSpaceOnUse">
+<stop offset="0.0510376" stop-color="#F0B760"/>
+<stop offset="0.365438" stop-color="#FDD293"/>
+<stop offset="0.836974" stop-color="#FFDFAC"/>
+</linearGradient>
+</defs>
+</svg>
+`;
